@@ -1,0 +1,47 @@
+@charset "UTF-8";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  justify-content: center;
+  background: black;
+}
+body .container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+body .container .nave {
+  position: absolute;
+  bottom: 50px;
+  left: 0px;
+  width: 100px;
+  height: 100px;
+  background: black;
+}
+body .container .bola {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  position: absolute;
+  border-radius: 50%;
+}
+body .container .bolaEnemigas {
+  width: 40px; /* Ajusta el tamaño de acuerdo a tus necesidades */
+  height: 40px; /* Ajusta el tamaño de acuerdo a tus necesidades */
+  background-color: white; /* Color blanco para la bola */
+  position: absolute;
+  top: -50px; /* Posición inicial arriba del contenedor */
+  left: 50%; /* Posición inicial centrada horizontalmente */
+  transform: translateX(-50%); /* Centrar horizontalmente */
+  border-radius: 50%;
+}
+
+/*# sourceMappingURL=index.css.map */
