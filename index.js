@@ -26,13 +26,28 @@ document.addEventListener('keydown', (event) => {
 window.addEventListener('load', () => {
     enemies.classList.add('fall');
 
-    // Colicion.
-    function detectarColision(elemento1, elemento2) {
-        // Obtiene las posiciones de los elementos
-        const rect1 = elemento1.getBoundingClientRect();
-        const rect2 = elemento2.getBoundingClientRect();
-
-        // Comprueba si los rectángulos de los elementos se superponen
+    function verificarColision() {
+        let airPlaneRect = airPlane.getBoundingClientRect(); // Obtener el rectángulo del avión
+        let enemiesList = document.querySelectorAll('.enemies'); // Obtener todos los elementos con la clase 'enemies'
+    
+        // Iterar sobre cada enemigo
+        enemiesList.forEach(function(enemy) {
+            let enemyRect = enemy.getBoundingClientRect(); // Obtener el rectángulo del enemigo
+    
+            // Verificar colisión entre el avión y el enemigo actual
+            if (detectarColision(airPlaneRect, enemyRect)) {
+                airPlane.style.display = 'none';
+                enemy.style.display = 'none'; // Ocultar el enemigo con el que se produce la colisión
+                gameOver.style.display = 'flex';
+            }
+        });
+    
+        // Solicitar la próxima animación para seguir verificando la colisión
+        requestAnimationFrame(verificarColision);
+    }
+    
+    // Detectar colisión entre dos rectángulos
+    function detectarColision(rect1, rect2) {
         return !(
             rect1.right < rect2.left ||
             rect1.left > rect2.right ||
@@ -40,25 +55,9 @@ window.addEventListener('load', () => {
             rect1.top > rect2.bottom
         );
     }
-    
-    function verificarColision() {
-        if (detectarColision(airPlane, enemies)) {
-            airPlane.style.display = 'none';
-            enemies.style.display = 'none';
-            gameOver.style.display = 'flex';
-        } else {
-            requestAnimationFrame(verificarColision);
-        }
-    }
 
     verificarColision();
 });
-
-
-
-
-
-
 
 
 
@@ -68,25 +67,31 @@ window.onload = function() {
     }, 1000);
 };
 
-function createFallingDiv() {
-    var windowWidth = window.innerWidth;
-    var divWidth = 50; // Ancho del div
-    var maxLeft = windowWidth - divWidth;
-    var randomLeft = Math.floor(Math.random() * maxLeft);
+// Creacion de enemies.
+let enemyCount = 0;
 
-    var div = document.createElement('div');
+function createFallingDiv() {
+    let windowWidth = window.innerWidth;
+    let divWidth = 50; // Ancho del div
+    let maxLeft = windowWidth - divWidth;
+    let randomLeft = Math.floor(Math.random() * maxLeft);
+
+    let div = document.createElement('div');
     div.className = 'enemies';
+    div.id = 'enemies';
+    enemyCount++; 
     div.style.left = randomLeft + 'px';
     document.body.appendChild(div);
 
     animateFallingDiv(div);
 }
 
+// Animacion de enemies.
 function animateFallingDiv(div) {
-    var windowHeight = window.innerHeight;
-    var duration = Math.floor(Math.random() * 3000) + 2000; // Duración de la animación entre 2 y 5 segundos
+    let windowHeight = window.innerHeight;
+    let duration = Math.floor(Math.random() * 3000) + 2000; // Duración de la animación entre 2 y 5 segundos
 
-    var animation = div.animate([
+    let animation = div.animate([
         { top: '0', opacity: 0 },
         { top: windowHeight + 'px', opacity: 1 }
     ], {
