@@ -34,7 +34,7 @@ body .enemies {
   height: 50px;
   border-radius: 50%;
   background-color: red;
-  transition: top 6s ease;
+  transition: top 3s linear;
 }
 body .fall {
   top: 100vh;
