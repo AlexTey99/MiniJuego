@@ -18,6 +18,12 @@ body .airPlane {
   height: 100px;
   margin: 10px;
 }
+body .municion {
+  width: 10px;
+  height: 20px;
+  background-color: yellow;
+  position: absolute;
+}
 body .gameOver {
   display: none;
   position: absolute;

@@ -1,109 +1,150 @@
-
 const airPlane = document.getElementById('airPlane');
-const enemies = document.getElementById('enemies');
-const gameOver = document.getElementById('gameOver');
+        const gameOver = document.getElementById('gameOver');
 
-let distancia = 0;
-const incremento = 10;
+        let distancia = 0;
+        const incremento = 10;
+        const padding = 15; // Ajuste del área de colisión
 
-// Configuracion del airPlane.
-
-// Desplazamiento al precionar las teclas arrowLeft/Rigth.
-document.addEventListener('keydown', (event) => {
-    if(event.key === 'ArrowRight'){
-        distancia += incremento;
-        airPlane.style.left = distancia + 'px';
-    }else if(event.key === 'ArrowLeft') {
-        distancia -= incremento;
-        airPlane.style.left = distancia + 'px';
-    }
-});
-
-
-// Configuracion de enemies.
-
-// Desplazamiento de enemies y resultado final de la colicion.
-window.addEventListener('load', () => {
-    enemies.classList.add('fall');
-
-    function verificarColision() {
-        let airPlaneRect = airPlane.getBoundingClientRect(); // Obtener el rectángulo del avión
-        let enemiesList = document.querySelectorAll('.enemies'); // Obtener todos los elementos con la clase 'enemies'
-    
-        // Iterar sobre cada enemigo
-        enemiesList.forEach(function(enemy) {
-            let enemyRect = enemy.getBoundingClientRect(); // Obtener el rectángulo del enemigo
-    
-            // Verificar colisión entre el avión y el enemigo actual
-            if (detectarColision(airPlaneRect, enemyRect)) {
-                airPlane.style.display = 'none';
-                enemy.style.display = 'none'; // Ocultar el enemigo con el que se produce la colisión
-                gameOver.style.display = 'flex';
+        // Configuración del airPlane.
+        // Desplazamiento al presionar las teclas ArrowLeft/ArrowRight y disparar al presionar la barra espaciadora.
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight') {
+                distancia += incremento;
+                airPlane.style.left = distancia + 'px';
+            } else if (event.key === 'ArrowLeft') {
+                distancia -= incremento;
+                airPlane.style.left = distancia + 'px';
+            } else if (event.key === ' ') { // Barra espaciadora
+                dispararProyectil();
             }
         });
-    
-        // Solicitar la próxima animación para seguir verificando la colisión
-        requestAnimationFrame(verificarColision);
-    }
-    
-    // Detectar colisión entre dos rectángulos
-    function detectarColision(rect1, rect2) {
-        return !(
-            rect1.right < rect2.left ||
-            rect1.left > rect2.right ||
-            rect1.bottom < rect2.top ||
-            rect1.top > rect2.bottom
-        );
-    }
 
-    verificarColision();
-});
+        function dispararProyectil() {
+            let proyectil = document.createElement('div');
+            proyectil.className = 'municion';
+            let airPlaneRect = airPlane.getBoundingClientRect();
+            proyectil.style.left = (airPlaneRect.left + airPlaneRect.width / 2 - 5) + 'px'; // Centrar el proyectil
+            proyectil.style.top = airPlaneRect.top + 'px';
+            document.body.appendChild(proyectil);
 
+            animateProyectil(proyectil);
+        }
 
+        function animateProyectil(proyectil) {
+            let duration = 1000; // Duración de la animación de 1 segundo
 
-window.onload = function() {
-    setInterval(function() {
-        createFallingDiv();
-    }, 1000);
-};
+            let animation = proyectil.animate([
+                { top: proyectil.style.top, opacity: 1 },
+                { top: '-20px', opacity: 1 }
+            ], {
+                duration: duration,
+                easing: 'linear'
+            });
 
-// Creacion de enemies.
-let enemyCount = 0;
+            animation.onfinish = function() {
+                proyectil.remove();
+            };
+        }
 
-function createFallingDiv() {
-    let windowWidth = window.innerWidth;
-    let divWidth = 50; // Ancho del div
-    let maxLeft = windowWidth - divWidth;
-    let randomLeft = Math.floor(Math.random() * maxLeft);
+        // Obtener el rectángulo ajustado del elemento
+        function getAdjustedRect(element, padding) {
+            var rect = element.getBoundingClientRect();
+            return {
+                top: rect.top + padding,
+                left: rect.left + padding,
+                bottom: rect.bottom - padding,
+                right: rect.right - padding
+            };
+        }
 
-    let div = document.createElement('div');
-    div.className = 'enemies';
-    div.id = 'enemies';
-    enemyCount++; 
-    div.style.left = randomLeft + 'px';
-    document.body.appendChild(div);
+        // Detectar colisión entre dos rectángulos ajustados
+        function detectarColision(rect1, rect2) {
+            return !(
+                rect1.right < rect2.left ||
+                rect1.left > rect2.right ||
+                rect1.bottom < rect2.top ||
+                rect1.top > rect2.bottom
+            );
+        }
 
-    animateFallingDiv(div);
-}
+        // Configuración de enemies y resultado final de la colisión.
+        window.addEventListener('load', () => {
+            function verificarColision() {
+                let airPlaneRect = getAdjustedRect(airPlane, padding); // Obtener el rectángulo ajustado del avión
+                let enemiesList = document.querySelectorAll('.enemies'); // Obtener todos los elementos con la clase 'enemies'
+                let proyectilesList = document.querySelectorAll('.municion'); // Obtener todos los proyectiles
 
-// Animacion de enemies.
-function animateFallingDiv(div) {
-    let windowHeight = window.innerHeight;
-    let duration = Math.floor(Math.random() * 3000) + 2000; // Duración de la animación entre 2 y 5 segundos
+                // Iterar sobre cada enemigo
+                enemiesList.forEach(function(enemy) {
+                    let enemyRect = getAdjustedRect(enemy, padding); // Obtener el rectángulo ajustado del enemigo
 
-    let animation = div.animate([
-        { top: '0', opacity: 0 },
-        { top: windowHeight + 'px', opacity: 1 }
-    ], {
-        duration: duration,
-        easing: 'linear'
-    });
+                    // Verificar colisión entre el avión y el enemigo actual
+                    if (detectarColision(airPlaneRect, enemyRect)) {
+                        airPlane.style.display = 'none';
+                        enemy.style.display = 'none'; // Ocultar el enemigo con el que se produce la colisión
+                        gameOver.style.display = 'flex';
+                    }
 
-    animation.onfinish = function() {
-        div.remove();
-    };
-}
+                    // Verificar colisión entre proyectiles y enemigos
+                    proyectilesList.forEach(function(proyectil) {
+                        let proyectilRect = getAdjustedRect(proyectil, padding); // Obtener el rectángulo ajustado del proyectil
+                        if (detectarColision(proyectilRect, enemyRect)) {
+                            proyectil.remove(); // Eliminar el proyectil
+                            enemy.remove(); // Eliminar el enemigo
+                        }
+                    });
 
+                    
+                });
 
+                // Solicitar la próxima animación para seguir verificando la colisión
+                requestAnimationFrame(verificarColision);
+            }
 
-    
+            verificarColision();
+        });
+
+        window.onload = function() {
+            setInterval(function() {
+                createFallingDiv();
+            }, 1000);
+        };
+
+        // Creación de enemies.
+        let enemyCount = 0;
+
+        function createFallingDiv() {
+            let windowWidth = window.innerWidth;
+            let divWidth = 50; // Ancho del div
+            let maxLeft = windowWidth - divWidth;
+            let randomLeft = Math.floor(Math.random() * maxLeft);
+
+            let div = document.createElement('div');
+            div.className = 'enemies';
+            enemyCount++;
+            div.style.left = randomLeft + 'px';
+            document.body.appendChild(div);
+
+            animateFallingDiv(div);
+        }
+
+        // Animación de enemies.
+        function animateFallingDiv(div) {
+            let windowHeight = window.innerHeight;
+            let duration = Math.floor(Math.random() * 3000) + 2000; // Duración de la animación entre 2 y 5 segundos
+
+            let animation = div.animate([
+                { top: '0', opacity: 0 },
+                { top: windowHeight + 'px', opacity: 1 }
+            ], {
+                duration: duration,
+                easing: 'linear'
+            });
+
+            animation.onfinish = function() {
+                div.remove();
+            };
+        }
+
+       
+        

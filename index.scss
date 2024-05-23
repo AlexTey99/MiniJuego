@@ -19,6 +19,13 @@ body{
         margin: 10px;
     }
 
+    .municion {
+        width: 10px;
+        height: 20px;
+        background-color: yellow;
+        position: absolute;
+    }
+
     .gameOver{
         display: none;
         position: absolute;
