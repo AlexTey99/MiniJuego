@@ -3,7 +3,8 @@ const airPlane = document.getElementById('airPlane');
 
         let distancia = 0;
         const incremento = 10;
-        const padding = 20; // Ajuste del área de colisión de airPlane
+        const padding = 35; // Ajuste del área de colisión de airPlane
+        const paddingEnemies = 0;
         const paddingProyectil = 0;
 
         // Configuración del airPlane.
@@ -61,7 +62,7 @@ const airPlane = document.getElementById('airPlane');
         }
 
         // Obtener el rectángulo ajustado del proyectil
-        function getAdjustedRectOther(element, paddingProyectil) {
+        function getAdjustedRectProyect(element, paddingProyectil) {
             var rect = element.getBoundingClientRect();
             return {
                 top: rect.top + paddingProyectil,
@@ -92,7 +93,7 @@ const airPlane = document.getElementById('airPlane');
 
                 // Iterar sobre cada enemigo
                 enemiesList.forEach(function(enemy) {
-                    let enemyRect = getAdjustedRect(enemy, padding); // Obtener el rectángulo ajustado del enemigo
+                    let enemyRect = getAdjustedRect(enemy, paddingEnemies); // Obtener el rectángulo ajustado del enemigo
 
                     // Verificar colisión entre el avión y el enemigo actual
                     if (detectarColision(airPlaneRect, enemyRect)) {
@@ -103,7 +104,7 @@ const airPlane = document.getElementById('airPlane');
 
                     // Verificar colisión entre proyectiles y enemigos
                     proyectilesList.forEach(function(proyectil) {
-                        let proyectilRect = getAdjustedRectOther(proyectil, paddingProyectil); // Obtener el rectángulo ajustado del proyectil
+                        let proyectilRect = getAdjustedRectProyect(proyectil, paddingProyectil); // Obtener el rectángulo ajustado del proyectil
                         if (detectarColision(proyectilRect, enemyRect)) {
                             console.log('Colisión detectada entre proyectil y enemigo');
                             proyectil.remove(); // Eliminar el proyectil
