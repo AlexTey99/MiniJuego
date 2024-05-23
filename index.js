@@ -3,7 +3,8 @@ const airPlane = document.getElementById('airPlane');
 
         let distancia = 0;
         const incremento = 10;
-        const padding = 15; // Ajuste del área de colisión
+        const padding = 20; // Ajuste del área de colisión de airPlane
+        const paddingProyectil = 0;
 
         // Configuración del airPlane.
         // Desplazamiento al presionar las teclas ArrowLeft/ArrowRight y disparar al presionar la barra espaciadora.
@@ -53,7 +54,22 @@ const airPlane = document.getElementById('airPlane');
                 top: rect.top + padding,
                 left: rect.left + padding,
                 bottom: rect.bottom - padding,
-                right: rect.right - padding
+                right: rect.right - padding,
+                width: rect.width - padding * 2,
+                height: rect.height - padding * 2
+            };
+        }
+
+        // Obtener el rectángulo ajustado del proyectil
+        function getAdjustedRectOther(element, paddingProyectil) {
+            var rect = element.getBoundingClientRect();
+            return {
+                top: rect.top + paddingProyectil,
+                left: rect.left + paddingProyectil,
+                bottom: rect.bottom - paddingProyectil,
+                right: rect.right - paddingProyectil,
+                width: rect.width - paddingProyectil * 2,
+                height: rect.height - paddingProyectil * 2
             };
         }
 
@@ -87,14 +103,13 @@ const airPlane = document.getElementById('airPlane');
 
                     // Verificar colisión entre proyectiles y enemigos
                     proyectilesList.forEach(function(proyectil) {
-                        let proyectilRect = getAdjustedRect(proyectil, padding); // Obtener el rectángulo ajustado del proyectil
+                        let proyectilRect = getAdjustedRectOther(proyectil, paddingProyectil); // Obtener el rectángulo ajustado del proyectil
                         if (detectarColision(proyectilRect, enemyRect)) {
+                            console.log('Colisión detectada entre proyectil y enemigo');
                             proyectil.remove(); // Eliminar el proyectil
                             enemy.remove(); // Eliminar el enemigo
                         }
                     });
-
-                    
                 });
 
                 // Solicitar la próxima animación para seguir verificando la colisión
