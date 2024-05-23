@@ -39,10 +39,9 @@ body{
         top: -100px;
         left: 50%;
         transform: translateX(-50%);
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background-color: red;
+        width: 80px;
+        height: 80px;
+        transform: rotate(-50deg); /* Rotar 45 grados */
         transition:top 3s linear;
     }
 

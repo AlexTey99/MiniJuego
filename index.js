@@ -4,7 +4,7 @@ const airPlane = document.getElementById('airPlane');
         let distancia = 0;
         const incremento = 10;
         const padding = 35; // Ajuste del área de colisión de airPlane
-        const paddingEnemies = 0;
+        const paddingEnemies = 32;
         const paddingProyectil = 0;
 
         // Configuración del airPlane.
@@ -135,7 +135,8 @@ const airPlane = document.getElementById('airPlane');
             let maxLeft = windowWidth - divWidth;
             let randomLeft = Math.floor(Math.random() * maxLeft);
 
-            let div = document.createElement('div');
+            let div = document.createElement('img');
+            div.src = './image/Meteor-PNG-Cutout.png';
             div.className = 'enemies';
             enemyCount++;
             div.style.left = randomLeft + 'px';
@@ -150,7 +151,7 @@ const airPlane = document.getElementById('airPlane');
             let duration = Math.floor(Math.random() * 3000) + 2000; // Duración de la animación entre 2 y 5 segundos
 
             let animation = div.animate([
-                { top: '0', opacity: 0 },
+                { top: '0', opacity: 0.2 },
                 { top: windowHeight + 'px', opacity: 1 }
             ], {
                 duration: duration,
