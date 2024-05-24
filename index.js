@@ -1,8 +1,9 @@
 const airPlane = document.getElementById('airPlane');
         const gameOver = document.getElementById('gameOver');
+        const contador = document.getElementById('contador');
 
         let distancia = 0;
-        const incremento = 10;
+        const incremento = 12;
         const padding = 35; // Ajuste del área de colisión de airPlane
         const paddingEnemies = 32;
         const paddingProyectil = 0;
@@ -99,6 +100,7 @@ const airPlane = document.getElementById('airPlane');
                     if (detectarColision(airPlaneRect, enemyRect)) {
                         airPlane.style.display = 'none';
                         enemy.style.display = 'none'; // Ocultar el enemigo con el que se produce la colisión
+                        contador.style.display = 'none';
                         gameOver.style.display = 'flex';
                     }
 

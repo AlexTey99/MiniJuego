@@ -45,6 +45,15 @@ body{
         transition:top 3s linear;
     }
 
+    .contador{
+        color: red;
+        position: absolute;
+        top: 5%;
+        right: 0;
+        font-size: 40px;
+        margin-right: 10px;
+    }
+
     .fall{
         top: 100vh; // Esta clase es para asignar hasta donde debe caer el div enemies.
     }

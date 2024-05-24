@@ -41,6 +41,14 @@ body .enemies {
   transform: rotate(-50deg); /* Rotar 45 grados */
   transition: top 3s linear;
 }
+body .contador {
+  color: red;
+  position: absolute;
+  top: 5%;
+  right: 0;
+  font-size: 40px;
+  margin-right: 10px;
+}
 body .fall {
   top: 100vh;
 }
